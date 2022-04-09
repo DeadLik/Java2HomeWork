@@ -15,6 +15,7 @@ public class ChatServer {
         clients = new ArrayList<>();
         authService = new InMemoryAuthService();
         authService.start();
+
     }
 
     public void run() {

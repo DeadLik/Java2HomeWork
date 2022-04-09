@@ -72,6 +72,7 @@ public class ChatClient {
         }
     }
 
+
     private void waitAuth() {
         while (true) {
             try {

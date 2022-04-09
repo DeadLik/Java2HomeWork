@@ -19,6 +19,7 @@ public class InMemoryAuthService implements AuthService {
         }
     }
 
+
     @Override
     public String getNickByLoginAndPassword(String login, String password) {
         for (UserData user : users) {

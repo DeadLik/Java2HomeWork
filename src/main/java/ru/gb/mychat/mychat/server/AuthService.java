@@ -9,4 +9,5 @@ public interface AuthService extends Closeable {
     void start();
 
     void close();
+
 }
