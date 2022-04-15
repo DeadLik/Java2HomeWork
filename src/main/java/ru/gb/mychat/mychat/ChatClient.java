@@ -5,46 +5,92 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import javafx.application.Platform;
+
 public class ChatClient {
 
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
 
-    private ClientController controller;
+    private final Controller controller;
 
-    public ChatClient(ClientController controller) {
+    public ChatClient(Controller controller) {
         this.controller = controller;
     }
 
-    public void openConnection() throws IOException {
+    public void openConnection() throws Exception {
         socket = new Socket("localhost", 8189);
         in = new DataInputStream(socket.getInputStream());
         out = new DataOutputStream(socket.getOutputStream());
-        new Thread(() -> {
+        final Thread readThread = new Thread(() -> {
             try {
-                waitAuth();
+                waitAuthenticate();
                 readMessage();
+            } catch (IOException e) {
+                e.printStackTrace();
             } finally {
                 closeConnection();
             }
-        }).start();
+        });
+        readThread.setDaemon(true);
+        readThread.start();
 
     }
 
-    private void readMessage() {
+    private void readMessage() throws IOException {
         while (true) {
-            try {
-                String msg = in.readUTF();
-                if ("/end".equals(msg)) {
-                    controller.toggleBoxesVisibility(false);
+            final String message = in.readUTF();
+            System.out.println("Receive message: " + message);
+            if (Command.isCommand(message)) {
+                final Command command = Command.getCommand(message);
+                final String[] params = command.parse(message);
+                if (command == Command.END) {
+                    controller.setAuth(false);
                     break;
                 }
-                controller.addMessage(msg);
-            } catch (IOException e) {
+                if (command == Command.ERROR) {
+                    Platform.runLater(() -> controller.showError(params));
+                    continue;
+                }
+                if (command == Command.CLIENTS) {
+                    controller.updateClientList(params);
+                    continue;
+                }
+            }
+            controller.addMessage(message);
+        }
+    }
+
+    private void waitAuthenticate() throws IOException {
+
+        Thread waitTime = new Thread(() -> {
+            try {
+                Thread.sleep(120000);
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            closeConnection();
+        });
 
+        waitTime.start();
+
+        while (true) {
+            final String msgAuth = in.readUTF();
+            if (Command.isCommand(msgAuth)) {
+                final Command command = Command.getCommand(msgAuth);
+                final String[] params = command.parse(msgAuth);
+                if (command == Command.AUTHOK) {
+                    final String nick = params[0];
+                    controller.addMessage("Успешная авторизация под ником " + nick);
+                    controller.setAuth(true);
+                    waitTime.stop(); // знаю что не лучший вариант но в данном случае думаю можно использовать. Хотелось бы узнать вариант получше
+                    break;
+                }
+                if (Command.ERROR.equals(command)) {
+                    Platform.runLater(() -> controller.showError(params));
+                }
+            }
         }
     }
 
@@ -70,31 +116,19 @@ public class ChatClient {
                 e.printStackTrace();
             }
         }
-    }
-
-
-    private void waitAuth() {
-        while (true) {
-            try {
-                String msg = in.readUTF(); // /authok nick
-                if (msg.startsWith("/authok")) {
-                    String[] split = msg.split(" ");
-                    String nick = split[1];
-                    controller.toggleBoxesVisibility(true);
-                    controller.addMessage("Успешная авторизация под ником " + nick);
-                    break;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        System.exit(0);
     }
 
     public void sendMessage(String message) {
         try {
+            System.out.println("Send message: " + message);
             out.writeUTF(message);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void sendMessage(Command command, String... params) {
+        sendMessage(command.collectMessage(params));
     }
 }
