@@ -66,7 +66,7 @@ public class ChatClient {
 
         Thread waitTime = new Thread(() -> {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(120000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
