@@ -16,9 +16,19 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.34.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>11.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.34.0</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -60,7 +70,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>ru.gb.mychat.mychat/ru.gb.mychat.mychat.HelloApplication</mainClass>
+                            <mainClass>ru.gb.mychat.mychat/homework2_7.ChatApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
