@@ -14,11 +14,15 @@ public class ChatServer {
 
     public ChatServer() {
         this.clients = new HashMap<>();
+
+        if (!Database.connect()) {
+            throw new RuntimeException("Не удается подключиться к базе данных");
+        }
     }
 
     public void run() {
         try (ServerSocket serverSocket = new ServerSocket(8189);
-             AuthService authService = new InMemoryAuthService()) {
+             AuthService authService = new DatabaseAuthService()) {
             while (true) {
                 System.out.println("Ожидание подключения...");
                 final Socket socket = serverSocket.accept();
@@ -27,6 +31,8 @@ public class ChatServer {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            Database.disconnect();
         }
     }
 
