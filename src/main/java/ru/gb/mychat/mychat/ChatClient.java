@@ -1,8 +1,6 @@
 package ru.gb.mychat.mychat;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 
 import javafx.application.Platform;
@@ -14,6 +12,9 @@ public class ChatClient {
     private DataOutputStream out;
 
     private final Controller controller;
+
+    private File historyFile;
+    private String nick;
 
     public ChatClient(Controller controller) {
         this.controller = controller;
@@ -81,10 +82,20 @@ public class ChatClient {
                 final Command command = Command.getCommand(msgAuth);
                 final String[] params = command.parse(msgAuth);
                 if (command == Command.AUTHOK) {
-                    final String nick = params[0];
+                    nick = params[0];
                     controller.addMessage("Успешная авторизация под ником " + nick);
                     controller.setAuth(true);
-                    waitTime.stop(); // знаю что не лучший вариант но в данном случае думаю можно использовать. Хотелось бы узнать вариант получше
+
+                    historyFile = new File("history_" + nick + ".his");
+                    try {
+                        if (!historyFile.exists()) {
+                            historyFile.createNewFile();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    waitTime.stop();
                     break;
                 }
                 if (Command.ERROR.equals(command)) {
@@ -119,7 +130,7 @@ public class ChatClient {
         System.exit(0);
     }
 
-    public void sendMessage(String message) {
+        public void sendMessage(String message) {
         try {
             System.out.println("Send message: " + message);
             out.writeUTF(message);
@@ -130,5 +141,9 @@ public class ChatClient {
 
     public void sendMessage(Command command, String... params) {
         sendMessage(command.collectMessage(params));
+    }
+
+    public String getNick() {
+        return nick;
     }
 }
