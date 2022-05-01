@@ -1,20 +1,31 @@
 package ru.gb.mychat.mychat;
 
-import java.util.Optional;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ListView;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import ru.gb.mychat.mychat.server.Database;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.sql.SQLException;
+import java.util.Optional;
 
 public class Controller {
+
+    @FXML
+    private Label lableBox;
+    @FXML
+    private HBox regBox;
+    @FXML
+    private TextField newLoginField;
+    @FXML
+    private PasswordField newPasswordField;
+    @FXML
+    private TextField newNickField;
 
     @FXML
     private ListView<String> clientList;
@@ -30,6 +41,8 @@ public class Controller {
     private TextField textField;
     @FXML
     private TextArea textArea;
+
+    private String nickname;
 
     private final ChatClient client;
 
@@ -53,6 +66,20 @@ public class Controller {
         client.sendMessage(message);
         textField.clear();
         textField.requestFocus();
+
+        if (nickname != client.getNick()) {
+            nickname = client.getNick();
+        }
+
+            try(Writer writer = new BufferedWriter(new FileWriter("history_" + nickname + ".his", true))) {
+                try {
+                    writer.append(nickname + ": " + message + "\n");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
     }
 
     public void addMessage(String message) {
@@ -65,6 +92,8 @@ public class Controller {
 
     public void setAuth(boolean success) {
         loginBox.setVisible(!success);
+        lableBox.setVisible(!success);
+        regBox.setVisible(!success);
         messageBox.setVisible(success);
     }
 
@@ -101,5 +130,13 @@ public class Controller {
     public void updateClientList(String[] params) {
         clientList.getItems().clear();
         clientList.getItems().addAll(params);
+    }
+
+    public void btnRegClick(ActionEvent actionEvent) throws SQLException {
+        Database.insert(newLoginField.getText(), newPasswordField.getText(), newNickField.getText());
+        newLoginField.clear();
+        newPasswordField.clear();
+        newNickField.clear();
+        System.out.println("Поздравляем с успешной регистрацией.\nВойдите через форму авторизации. ");
     }
 }
