@@ -2,6 +2,8 @@ package ru.gb.mychat.mychat;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javafx.application.Platform;
 
@@ -16,6 +18,8 @@ public class ChatClient {
     private File historyFile;
     private String nick;
 
+    ExecutorService executorService = Executors.newCachedThreadPool();
+
     public ChatClient(Controller controller) {
         this.controller = controller;
     }
@@ -24,7 +28,20 @@ public class ChatClient {
         socket = new Socket("localhost", 8189);
         in = new DataInputStream(socket.getInputStream());
         out = new DataOutputStream(socket.getOutputStream());
-        final Thread readThread = new Thread(() -> {
+
+        executorService.execute(() -> {
+            try {
+                waitAuthenticate();
+                readMessage();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                closeConnection();
+                executorService.shutdown();
+            }
+        });
+
+        /*        final Thread readThread = new Thread(() -> {
             try {
                 waitAuthenticate();
                 readMessage();
@@ -35,7 +52,7 @@ public class ChatClient {
             }
         });
         readThread.setDaemon(true);
-        readThread.start();
+        readThread.start();*/
 
     }
 
@@ -65,8 +82,8 @@ public class ChatClient {
 
     private void waitAuthenticate() throws IOException {
 
-        Thread waitTime = new Thread(() -> {
-            try {
+        Thread waitTime = new Thread(() -> {     // Не нашел решение как остановить ExecutorService,
+            try {                                // пока оставил так, поменял на waitTime.interrupt();
                 Thread.sleep(120000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -95,7 +112,7 @@ public class ChatClient {
                         e.printStackTrace();
                     }
 
-                    waitTime.stop();
+                    waitTime.interrupt();
                     break;
                 }
                 if (Command.ERROR.equals(command)) {
@@ -106,6 +123,7 @@ public class ChatClient {
     }
 
     private void closeConnection() {
+
         if (socket != null) {
             try {
                 socket.close();
@@ -128,6 +146,7 @@ public class ChatClient {
             }
         }
         System.exit(0);
+        executorService.shutdown();
     }
 
         public void sendMessage(String message) {
