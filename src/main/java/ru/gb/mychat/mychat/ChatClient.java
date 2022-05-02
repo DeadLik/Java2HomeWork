@@ -85,7 +85,7 @@ public class ChatClient {
         Thread waitTime = new Thread(() -> {         // Не нашел решение как остановить ExecutorService,
            while (true && !Thread.interrupted()) {   // пока оставил так, поменял на waitTime.interrupt();
                try {                               
-                   Thread.sleep(10000);
+                   Thread.sleep(120000);
                } catch (InterruptedException e) {
                    e.printStackTrace();
                    break;
