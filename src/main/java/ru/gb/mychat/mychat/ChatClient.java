@@ -82,13 +82,16 @@ public class ChatClient {
 
     private void waitAuthenticate() throws IOException {
 
-        Thread waitTime = new Thread(() -> {     // Не нашел решение как остановить ExecutorService,
-            try {                                // пока оставил так, поменял на waitTime.interrupt();
-                Thread.sleep(120000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            closeConnection();
+        Thread waitTime = new Thread(() -> {         // Не нашел решение как остановить ExecutorService,
+           while (true && !Thread.interrupted()) {   // пока оставил так, поменял на waitTime.interrupt();
+               try {                               
+                   Thread.sleep(10000);
+               } catch (InterruptedException e) {
+                   e.printStackTrace();
+                   break;
+               }
+               closeConnection();
+           }
         });
 
         waitTime.start();
