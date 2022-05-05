@@ -4,6 +4,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import ru.gb.mychat.mychat.Command;
 
@@ -16,6 +18,8 @@ public class ClientHandler {
 
     private String nick;
 
+    ExecutorService executorService = Executors.newCachedThreadPool();
+
     public ClientHandler(Socket socket, ChatServer server, AuthService authService) {
         try {
             this.nick = "";
@@ -25,14 +29,26 @@ public class ClientHandler {
             this.out = new DataOutputStream(socket.getOutputStream());
             this.authService = authService;
 
-            new Thread(() -> {
+
+
+            executorService.execute(() -> {
+                try {
+                    authenticate();
+                    readMessages();
+                } finally {
+                    closeConnection();
+                    executorService.shutdown();
+                }
+            });
+
+/*            new Thread(() -> {
                 try {
                     authenticate();
                     readMessages();
                 } finally {
                     closeConnection();
                 }
-            }).start();
+            }).start();*/
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -64,6 +80,7 @@ public class ClientHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        executorService.shutdown();
     }
 
     private void authenticate() {
@@ -139,4 +156,6 @@ public class ClientHandler {
     public String getNick() {
         return nick;
     }
+
+
 }
