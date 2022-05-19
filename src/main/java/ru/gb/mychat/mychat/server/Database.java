@@ -1,8 +1,13 @@
 package ru.gb.mychat.mychat.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.*;
 
 public class Database {
+    private static final Logger log = LogManager.getLogger(Database.class);
+
     private static Connection connection;
     private static Statement statement;
 
@@ -12,7 +17,7 @@ public class Database {
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:mainDB.db");
-            System.out.println("Подключение к базе данных выполнено");
+            log.info("Подключение к базе данных выполнено");
             statement = connection.createStatement();
             createTable();
 
@@ -53,7 +58,7 @@ public class Database {
         }
     }
 
-    private static void insert(String login, String password, String nick) throws SQLException {
+    public static void insert(String login, String password, String nick) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement("INSERT INTO users (login, password, nick) VALUES (?, ?, ?)")) {
             statement.setString(1, login);
             statement.setString(2, password);

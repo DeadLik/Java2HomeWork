@@ -1,13 +1,19 @@
 package ru.gb.mychat.mychat;
 
-import java.io.*;
+import javafx.application.Platform;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javafx.application.Platform;
-
 public class ChatClient {
+    private static final Logger log = LogManager.getLogger(ChatClient.class);
 
     private Socket socket;
     private DataInputStream in;
@@ -82,8 +88,8 @@ public class ChatClient {
 
     private void waitAuthenticate() throws IOException {
 
-        Thread waitTime = new Thread(() -> {         // Не нашел решение как остановить ExecutorService,
-           while (true && !Thread.interrupted()) {   // пока оставил так, поменял на waitTime.interrupt();
+        Thread waitTime = new Thread(() -> {
+           while (true && !Thread.interrupted()) {
                try {                               
                    Thread.sleep(120000);
                } catch (InterruptedException e) {
@@ -154,7 +160,7 @@ public class ChatClient {
 
         public void sendMessage(String message) {
         try {
-            System.out.println("Send message: " + message);
+            log.info("Send message: " + message);
             out.writeUTF(message);
         } catch (IOException e) {
             e.printStackTrace();

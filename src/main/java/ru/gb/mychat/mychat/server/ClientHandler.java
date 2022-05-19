@@ -6,10 +6,15 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.gb.mychat.mychat.Command;
 
 public class ClientHandler {
+    private static final Logger log = LogManager.getLogger(ClientHandler.class);
+
     private final Socket socket;
     private final ChatServer server;
     private final DataInputStream in;
@@ -122,7 +127,7 @@ public class ClientHandler {
 
     public void sendMessage(String message) {
         try {
-            System.out.println("СЕРВЕР: Отправка сообщения " + nick);
+            log.info("СЕРВЕР: Отправка сообщения " + nick);
             out.writeUTF(message);
         } catch (IOException e) {
             e.printStackTrace();
@@ -133,7 +138,7 @@ public class ClientHandler {
         try {
             while (true) {
                 final String msg = in.readUTF();
-                System.out.println("Получено сообщение: " + msg);
+                log.info("Получено сообщение: " + msg);
                 if (Command.isCommand(msg)) {
                     final Command command = Command.getCommand(msg);
                     final String[] params = command.parse(msg);
