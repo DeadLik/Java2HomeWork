@@ -38,3 +38,35 @@ INFO  14:41:19.333 [JavaFX Application Thread] ru.gb.mychat.mychat.ChatClient (C
 INFO  14:41:19.333 [pool-3-thread-1] ru.gb.mychat.mychat.server.ClientHandler (ClientHandler.java:141) - Получено сообщение: sdf
 INFO  14:41:19.334 [pool-3-thread-1] ru.gb.mychat.mychat.server.ClientHandler (ClientHandler.java:130) - СЕРВЕР: Отправка сообщения bulka
 INFO  14:41:19.334 [pool-3-thread-1] ru.gb.mychat.mychat.server.ClientHandler (ClientHandler.java:130) - СЕРВЕР: Отправка сообщения volk
+INFO  15:25:10.907 [main] ru.gb.mychat.mychat.server.Database (Database.java:20) - Подключение к базе данных выполнено
+INFO  15:25:10.913 [main] ru.gb.mychat.mychat.server.ChatServer (ChatServer.java:32) - Ожидание подключения...
+INFO  15:25:19.419 [main] ru.gb.mychat.mychat.server.ChatServer (ChatServer.java:35) - Клиент подключился
+INFO  15:25:19.419 [main] ru.gb.mychat.mychat.server.ChatServer (ChatServer.java:32) - Ожидание подключения...
+INFO  15:25:27.313 [JavaFX Application Thread] ru.gb.mychat.mychat.ChatClient (ChatClient.java:163) - Send message: /auth user1 111
+INFO  15:25:27.321 [pool-2-thread-1] ru.gb.mychat.mychat.server.ClientHandler (ClientHandler.java:130) - СЕРВЕР: Отправка сообщения 
+INFO  15:25:27.323 [pool-2-thread-1] ru.gb.mychat.mychat.server.ClientHandler (ClientHandler.java:130) - СЕРВЕР: Отправка сообщения bulka
+INFO  15:25:27.325 [pool-2-thread-1] ru.gb.mychat.mychat.server.ClientHandler (ClientHandler.java:130) - СЕРВЕР: Отправка сообщения bulka
+INFO  15:26:44.335 [main] ru.gb.mychat.mychat.server.Database (Database.java:20) - Подключение к базе данных выполнено
+INFO  15:26:44.343 [main] ru.gb.mychat.mychat.server.ChatServer (ChatServer.java:32) - Ожидание подключения...
+INFO  15:26:51.940 [main] ru.gb.mychat.mychat.server.ChatServer (ChatServer.java:35) - Клиент подключился
+INFO  15:26:51.940 [main] ru.gb.mychat.mychat.server.ChatServer (ChatServer.java:32) - Ожидание подключения...
+INFO  15:26:57.368 [JavaFX Application Thread] ru.gb.mychat.mychat.ChatClient (ChatClient.java:163) - Send message: /auth user1 111
+INFO  15:26:57.377 [pool-2-thread-1] ru.gb.mychat.mychat.server.ClientHandler (ClientHandler.java:130) - СЕРВЕР: Отправка сообщения 
+INFO  15:26:57.379 [pool-2-thread-1] ru.gb.mychat.mychat.server.ClientHandler (ClientHandler.java:130) - СЕРВЕР: Отправка сообщения bulka
+INFO  15:26:57.380 [pool-2-thread-1] ru.gb.mychat.mychat.server.ClientHandler (ClientHandler.java:130) - СЕРВЕР: Отправка сообщения bulka
+INFO  15:29:44.013 [main] ru.gb.mychat.mychat.server.Database (Database.java:20) - Подключение к базе данных выполнено
+INFO  15:29:44.020 [main] ru.gb.mychat.mychat.server.ChatServer (ChatServer.java:32) - Ожидание подключения...
+INFO  15:29:53.169 [main] ru.gb.mychat.mychat.server.ChatServer (ChatServer.java:35) - Клиент подключился
+INFO  15:29:53.170 [main] ru.gb.mychat.mychat.server.ChatServer (ChatServer.java:32) - Ожидание подключения...
+INFO  15:29:58.360 [JavaFX Application Thread] ru.gb.mychat.mychat.ChatClient (ChatClient.java:163) - Send message: /auth user2 222
+INFO  15:29:58.368 [pool-2-thread-1] ru.gb.mychat.mychat.server.ClientHandler (ClientHandler.java:130) - СЕРВЕР: Отправка сообщения 
+INFO  15:29:58.370 [pool-2-thread-1] ru.gb.mychat.mychat.server.ClientHandler (ClientHandler.java:130) - СЕРВЕР: Отправка сообщения volk
+INFO  15:29:58.371 [pool-2-thread-1] ru.gb.mychat.mychat.server.ClientHandler (ClientHandler.java:130) - СЕРВЕР: Отправка сообщения volk
+INFO  15:32:47.263 [main] ru.gb.mychat.mychat.server.Database (Database.java:20) - Подключение к базе данных выполнено
+INFO  15:32:47.270 [main] ru.gb.mychat.mychat.server.ChatServer (ChatServer.java:32) - Ожидание подключения...
+INFO  15:32:52.473 [main] ru.gb.mychat.mychat.server.ChatServer (ChatServer.java:35) - Клиент подключился
+INFO  15:32:52.474 [main] ru.gb.mychat.mychat.server.ChatServer (ChatServer.java:32) - Ожидание подключения...
+INFO  15:32:57.895 [JavaFX Application Thread] ru.gb.mychat.mychat.ChatClient (ChatClient.java:163) - Send message: /auth user1 111
+INFO  15:32:57.904 [pool-2-thread-1] ru.gb.mychat.mychat.server.ClientHandler (ClientHandler.java:130) - СЕРВЕР: Отправка сообщения 
+INFO  15:32:57.906 [pool-2-thread-1] ru.gb.mychat.mychat.server.ClientHandler (ClientHandler.java:130) - СЕРВЕР: Отправка сообщения bulka
+INFO  15:32:57.908 [pool-2-thread-1] ru.gb.mychat.mychat.server.ClientHandler (ClientHandler.java:130) - СЕРВЕР: Отправка сообщения bulka
