@@ -65,7 +65,7 @@ public class ChatClient {
     private void readMessage() throws IOException {
         while (true) {
             final String message = in.readUTF();
-            System.out.println("Receive message: " + message);
+            log.info("Receive message: " + message);
             if (Command.isCommand(message)) {
                 final Command command = Command.getCommand(message);
                 final String[] params = command.parse(message);
